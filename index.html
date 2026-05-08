@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>算術鬧鐘</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ═══════════ SCREEN: MAIN ═══════════ -->
+  <div class="screen active" id="screen-main">
+    <div class="header">
+      <h1 data-i18n="appTitle">⏰ 算術鬧鐘</h1>
+      <button class="lang-toggle" id="btn-lang" title="中 / EN">中/EN</button>
+    </div>
+    <div class="empty-state" id="empty-state">
+      <div class="icon" data-i18n="emptyIcon">🔔</div>
+      <p data-i18n="emptyText">添加第一個算術鬧鐘</p>
+    </div>
+    <div class="alarm-list" id="alarm-list"></div>
+    <button class="fab" id="fab-add" title="新增鬧鐘">
+      <span>+</span>
+    </button>
+  </div>
+
+  <!-- ═══════════ SCREEN: SETTINGS ═══════════ -->
+  <div class="screen" id="screen-settings">
+    <div class="header">
+      <button class="back-btn" id="btn-back-settings">←</button>
+      <h1 id="settings-title" data-i18n="newAlarm">新增鬧鐘</h1>
+    </div>
+    <div class="settings-form">
+      <div class="form-group">
+        <label data-i18n="time">時間</label>
+        <div class="time-pickers">
+          <select id="hour-select"></select>
+          <span class="colon">:</span>
+          <select id="minute-select"></select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label data-i18n="repeat">重複</label>
+        <div class="repeat-options" id="repeat-options">
+          <div class="repeat-radio selected" data-repeat="once" data-i18n="once">單次</div>
+          <div class="repeat-radio" data-repeat="daily" data-i18n="daily">每天</div>
+          <div class="repeat-radio" data-repeat="custom" data-i18n="custom">自訂</div>
+        </div>
+        <div class="day-checkboxes" id="day-checkboxes" style="display:none">
+          <div class="day-check" data-day="1" data-i18n-day="1">一</div>
+          <div class="day-check" data-day="2" data-i18n-day="2">二</div>
+          <div class="day-check" data-day="3" data-i18n-day="3">三</div>
+          <div class="day-check" data-day="4" data-i18n-day="4">四</div>
+          <div class="day-check" data-day="5" data-i18n-day="5">五</div>
+          <div class="day-check" data-day="6" data-i18n-day="6">六</div>
+          <div class="day-check" data-day="0" data-i18n-day="0">日</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label data-i18n="gradeLabel">香港數學課程年級</label>
+        <select id="grade-select">
+          <optgroup data-group="primary" label="小學">
+            <option value="p1" data-grade="p1">小一</option>
+            <option value="p2" data-grade="p2">小二</option>
+            <option value="p3" data-grade="p3">小三</option>
+            <option value="p4" data-grade="p4">小四</option>
+            <option value="p5" data-grade="p5">小五</option>
+            <option value="p6" data-grade="p6">小六</option>
+          </optgroup>
+          <optgroup data-group="secondary" label="中學">
+            <option value="s1" data-grade="s1">中一</option>
+            <option value="s2" data-grade="s2">中二</option>
+            <option value="s3" data-grade="s3">中三</option>
+            <option value="s4" data-grade="s4">中四</option>
+            <option value="s5" data-grade="s5">中五</option>
+            <option value="s6" data-grade="s6">中六</option>
+          </optgroup>
+          <optgroup data-group="elective" label="DSE 選修">
+            <option value="m1" data-grade="m1">M1（微積分與統計）</option>
+            <option value="m2" data-grade="m2">M2（代數與微積分）</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label data-i18n="questionCount">題目數量</label>
+        <select id="question-count-select">
+          <option value="1">1 題</option>
+          <option value="2">2 題</option>
+          <option value="3">3 題</option>
+          <option value="4">4 題</option>
+          <option value="5">5 題</option>
+          <option value="6">6 題</option>
+          <option value="7">7 題</option>
+          <option value="8">8 題</option>
+          <option value="9">9 題</option>
+          <option value="10">10 題</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label data-i18n="labelField">標籤（自訂）</label>
+        <input type="text" id="label-input" data-i18n-placeholder="labelPlaceholder" placeholder="例如：起床上學" maxlength="20">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" id="btn-cancel" data-i18n="cancel">取消</button>
+        <button class="btn btn-primary" id="btn-save" data-i18n="save">儲存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ SCREEN: CHALLENGE ═══════════ -->
+  <div class="screen" id="screen-challenge">
+    <div class="challenge-top">
+      <span id="challenge-label">鬧鐘</span>
+      <span class="current-time" id="challenge-time">00:00</span>
+    </div>
+    <div class="challenge-body">
+      <div class="question-label" id="grade-label">小一</div>
+      <div class="question-progress" id="question-progress">第 1/1 題</div>
+      <div class="question-text" id="question-text">3 + 5 = ?</div>
+      <div class="answer-display" id="answer-display"></div>
+      <div class="error-msg" id="error-msg"></div>
+      <div class="correct-msg" id="correct-msg"></div>
+      <div class="numpad" id="numpad">
+        <button data-key="1">1</button>
+        <button data-key="2">2</button>
+        <button data-key="3">3</button>
+        <button data-key="/">/</button>
+        <button data-key="4">4</button>
+        <button data-key="5">5</button>
+        <button data-key="6">6</button>
+        <button data-key=".">.</button>
+        <button data-key="7">7</button>
+        <button data-key="8">8</button>
+        <button data-key="9">9</button>
+        <button data-key="-">−</button>
+        <button data-key="0">0</button>
+        <button data-key="back">⌫</button>
+        <button class="key-skip" data-key="skip" data-i18n="skip">換一題</button>
+        <button class="key-submit" data-key="submit" data-i18n="submit">提交答案</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success overlay -->
+  <div class="success-overlay" id="success-overlay">
+    <div class="check-icon">✓</div>
+    <div class="msg" data-i18n="alarmOff">鬧鐘已關閉</div>
+  </div>
+
+  <!-- Notification permission prompt -->
+  <div class="notification-prompt" id="notification-prompt">
+    <span data-i18n="notifPrompt">開啟通知以防錯過鬧鐘</span>
+    <button id="btn-enable-notifications" data-i18n="notifEnable">啟用</button>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
